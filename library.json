@@ -1,0 +1,30 @@
+{
+	"name": "NomadStar LP5562 RGB LED library",
+	"version": "1.0.0",
+	"keywords": [
+		"RGB LED",
+		"LP5562",
+		"NomadStar"
+	],
+	"description": "NomadStar library for the IOBOard-RGB module with the LP5562 RGB LED",
+	"frameworks": [
+		"arduino"
+	],
+	"platforms": [
+		"*"
+	],
+	"license": "",
+	"authors": [
+		{
+			"email": "contact@nomadstar.ch",
+			"url": "https://nomadstar.ch",
+			"maintainer": true,
+			"name": "NomadStar"
+		}
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/NomadStar-outdoor/IOBoard-RGB-LP5562-Library"
+	},
+	"homepage": "https://nomadstar.ch"
+}
