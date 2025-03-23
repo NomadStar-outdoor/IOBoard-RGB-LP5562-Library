@@ -107,5 +107,3 @@ class LP5562
         uint8_t _blue;
         uint8_t _white;
 };
-
-#endif
