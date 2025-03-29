@@ -22,8 +22,11 @@ bool LP5562::begin(TwoWire &wirePort) {
 	if (_i2cPort->endTransmission())
 		return false;
 
-    setColor(0,0,0,0);
-    writeReg(8, 1); // Set internal clock
+    Wire.begin();
+    writeReg(0x00, 0x40); // enable LP5562
+    writeReg(0x08, 0x01); // Set internal clock
+    writeReg(0x70, 0x00); // Direct control via I2C
+    setColor(208,171,117,0);
 
     return true;
 }
@@ -67,7 +70,10 @@ void LP5562::setChannel(uint8_t channel, uint8_t value) {
 
 void LP5562::writeReg(uint8_t reg, uint8_t value) {
     Wire.beginTransmission(_addr);
-    Wire.write(((reg&0x7)<<5)|(value&0x1f)); // rrrvvvvv
+    // bitshift has to be re-calculated
+    // Wire.write(((reg&0x7)<<5)|(value&0x1f)); // rrrvvvvv
+    Wire.write(reg);
+    Wire.write(value);
     Wire.endTransmission();
 }
 
