@@ -26,7 +26,7 @@ bool LP5562::begin(TwoWire &wirePort) {
     writeReg(0x00, 0x40); // enable LP5562
     writeReg(0x08, 0x01); // Set internal clock
     writeReg(0x70, 0x00); // Direct control via I2C
-    setColor(208,171,117,0);
+    setColor(140,45,0,0);
 
     return true;
 }
@@ -39,29 +39,23 @@ void LP5562::setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t white) {
 }
 
 void LP5562::setRed(uint8_t value) {
-	if(value != 0 && value < 8) 
-		value = 8;
-    setChannel(_red,(value>>3));
+    value = (value>255)?255:value;
+    setChannel(_red, value);
 }
 
 void LP5562::setGreen(uint8_t value) {
-	if(value != 0 && value < 8) 
-		value = 8;
-    setChannel(_green,(value>>3));
+    value = (value>255)?255:value;
+    setChannel(_green, value);
 }
 
 void LP5562::setBlue(uint8_t value) {
-	if(value != 0 && value < 8) 
-		value = 8;
-
-    setChannel(_blue,(value>>3));
+	value = (value>255)?255:value;
+    setChannel(_blue, value);
 }
 
 void LP5562::setWhite(uint8_t value) {
-	if(value != 0 && value < 8) 
-		value = 8;
-
-    setChannel(_white,(value>>3));
+	value = (value>255)?255:value;
+    setChannel(_white, value);
 }
 
 void LP5562::setChannel(uint8_t channel, uint8_t value) {
@@ -70,8 +64,6 @@ void LP5562::setChannel(uint8_t channel, uint8_t value) {
 
 void LP5562::writeReg(uint8_t reg, uint8_t value) {
     Wire.beginTransmission(_addr);
-    // bitshift has to be re-calculated
-    // Wire.write(((reg&0x7)<<5)|(value&0x1f)); // rrrvvvvv
     Wire.write(reg);
     Wire.write(value);
     Wire.endTransmission();
@@ -79,8 +71,13 @@ void LP5562::writeReg(uint8_t reg, uint8_t value) {
 
 void LP5562::setCurrent(uint8_t iled) {
     iled = (iled>30)?30:iled;
-
-    writeReg(LP5562_REG_ILED, iled);
+    uint8_t iled_multiplyer = 8;
+    uint8_t iled_value = iled * iled_multiplyer;
+    iled_value = (iled_value>174)?174:iled_value;
+    writeReg(LP5562_REG_R_ILED, iled_value);
+    writeReg(LP5562_REG_G_ILED, iled_value);
+    writeReg(LP5562_REG_B_ILED, iled_value);
+    writeReg(LP5562_REG_W_ILED, iled_value);
 }
 
 void LP5562::mapColors(uint8_t red, uint8_t green, uint8_t blue, uint8_t white) {
